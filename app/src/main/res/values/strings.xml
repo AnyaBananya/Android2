@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">BaForecast</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,4 +9,49 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="app_name">Bananya Weather</string>
+    <string name="label_city">City</string>
+    <string name="label_cur_temp">Temperature</string>
+    <string name="city">Moscow</string>
+    <string name="cur_temp">+15</string>
+    <string name="label_pressure">Pressure</string>
+    <string name="label_wind_speed">Wind speed</string>
+    <string name="pressure">749 mmHg</string>
+    <string name="wind_speed">2 m/s</string>
+    <string name="button_select">Select</string>
+    <string name="button_go_to_city_list">Select another city</string>
+    <string name="msg_pressure">Pressure is checked</string>
+    <string name="darkTheme">Dark theme</string>
+    <string name="toast">Text for a toast</string>
+    <string name="back">Back</string>
+    <string-array name="cities">
+        <item>Moscow</item>
+        <item>Saint Petersburg</item>
+        <item>Novosibirsk</item>
+        <item>Yakutsk</item>
+    </string-array>
+    <string-array name="temperatures">
+        <item>+15</item>
+        <item>+10</item>
+        <item>+5</item>
+        <item>-5</item>
+    </string-array>
+    <string-array name="pressures">
+        <item>749 mmHg</item>
+        <item>750 mmHg</item>
+        <item>751 mmHg</item>
+        <item>752 mmHg</item>
+    </string-array>
+    <string-array name="windSpeeds">
+        <item>2 m/s</item>
+        <item>10 m/s</item>
+        <item>3 m/s</item>
+        <item>4 m/s</item>
+    </string-array>
+    <string-array name="days">
+        <item>Tomorrow +10</item>
+        <item>01.01.2021 +5</item>
+        <item>02.01.2021 +2</item>
+    </string-array>
 </resources>

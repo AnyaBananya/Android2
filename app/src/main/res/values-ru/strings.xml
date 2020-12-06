@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="app_name">Погода Бананя</string>
+    <string name="label_city">Город</string>
+    <string name="label_cur_temp">Температура</string>
+    <string name="city">Москва</string>
+    <string name="cur_temp">+15</string>
+    <string name="label_pressure">Давление</string>
+    <string name="label_wind_speed">Скорость ветра</string>
+    <string name="pressure">749 мм. рт. ст</string>
+    <string name="wind_speed">2 м/с</string>
+    <string name="button_select">Выбрать</string>
+    <string name="button_go_to_city_list">Выбрать другой город</string>
+    <string name="msg_pressure">Будет отображаться давление</string>
+    <string name="darkTheme">Темная тема</string>
+    <string name="toast">Текст для toast</string>
+    <string name="back">Назад</string>
+    <string-array name="cities">
+        <item>Москва</item>
+        <item>Санкт-Петербург</item>
+        <item>Новосибирск</item>
+        <item>Якутск</item>
+    </string-array>
+    <string-array name="pressures">
+        <item>749 мм. рт. ст</item>
+        <item>750 мм. рт. ст</item>
+        <item>751 мм. рт. ст</item>
+        <item>752 мм. рт. ст</item>
+    </string-array>
+    <string-array name="windSpeeds">
+        <item>2 м/с</item>
+        <item>10 м/с</item>
+        <item>3 м/с</item>
+        <item>4 м/с</item>
+    </string-array>
+    <string-array name="days">
+        <item>Tomorrow +10</item>
+        <item>01.01.2021 +5</item>
+        <item>02.01.2021 +2</item>
+    </string-array>
+</resources>
