@@ -5,5 +5,11 @@
             android:id="@+id/action_settings"
             android:title="@string/action_settings"
             android:orderInCategory="100"
+            app:showAsAction="never"
+            app:icon="@android:drawable/ic_menu_preferences" />
+    <item
+            android:id="@+id/action_select_city"
+            android:title="@string/button_go_to_city_list"
+            android:orderInCategory="20"
             app:showAsAction="never" />
 </menu>

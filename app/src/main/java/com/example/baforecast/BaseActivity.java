@@ -15,7 +15,7 @@ public class BaseActivity extends AppCompatActivity {
         if(isDarkTheme()){
             setTheme(R.style.AppDarkTheme);
         }else{
-            setTheme(R.style.AppTheme);
+            setTheme(R.style.Theme_BaForecast_NoActionBar);
         }
         setContentView(R.layout.activity_base);
     }
