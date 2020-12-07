@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.baforecast.model.WeatherRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,7 +20,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,7 +47,7 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final boolean DEBUG = false;
     private static final int DAY_COUNT = 5;
@@ -56,27 +63,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-            R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-            .setDrawerLayout(drawer)
-            .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        Toolbar toolbar = initToolbar();
+        initDrawer(toolbar);
 
         txtViewCity = (TextView) findViewById(R.id.text_city);
         txtViewTemperature = (TextView) findViewById(R.id.text_curr_temp);
@@ -89,6 +77,119 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             city = new City(getResources().getStringArray(R.array.cities)[0]);
         }
 
+        connect();
+
+        txtViewCity.setText(city.getName());
+        txtViewTemperature.setText(city.getTemperature());
+        txtViewPressure.setText(city.getPressure());
+
+        initRecyclerView(generateDays(), generateTemperatures());
+
+    }
+
+    private Toolbar initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        return toolbar;
+    }
+
+
+    private void initDrawer(Toolbar toolbar) {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivityForResult(intent, SETTING_CODE);
+            return true;
+        }
+
+        if (id == R.id.action_select_city) {
+            Intent intent = new Intent(getApplicationContext(), SelectCityActivity.class);
+            intent.putExtra(Constants.EXTRA_PARCEL, city);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initRecyclerView(String[] days, String[] temperatures) {
+        RecyclerView recyclerView = findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        SocnetAdapter adapter = new SocnetAdapter(days, temperatures);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private String[] generateDays() {
+        String[] days = new String[DAY_COUNT];
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM");
+        Calendar calendar = Calendar.getInstance();
+
+        for (int i = 0; i < DAY_COUNT; i++) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            days[i] = dateFormatter.format(calendar.getTime());
+        }
+
+        return days;
+    }
+
+    private String[] generateTemperatures() {
+        String[] temps = new String[DAY_COUNT];
+        Calendar calendar = Calendar.getInstance();
+
+        for (int i = 0; i < DAY_COUNT; i++) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            temps[i] = "+ " + calendar.get(Calendar.DAY_OF_MONTH);
+        }
+
+        return temps;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SETTING_CODE) {
+            recreate();
+        }
+    }
+
+    private String getLines(BufferedReader in) {
+        return in.lines().collect(Collectors.joining("\n"));
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void displayWeather(WeatherRequest weatherRequest) {
+        txtViewCity.setText(weatherRequest.getName());
+        txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - 273.15));
+        txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure() / 1.333));
+
+        if (city.isNeedPressure()) {
+            TextView txtViewLabelPressure = (TextView) findViewById(R.id.label_pressure);
+            txtViewLabelPressure.setVisibility(View.VISIBLE);
+            txtViewPressure.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void connect(){
         final URL uri;
         try {
             uri = new URL(String.format(WEATHER_URL, URLEncoder.encode(city.getName(), StandardCharsets.UTF_8.toString()), BuildConfig.WEATHER_API_KEY));
@@ -129,106 +230,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             Log.e(TAG, "Fail encode URL", e);
             e.printStackTrace();
         }
-
-        txtViewCity.setText(city.getName());
-        txtViewTemperature.setText(city.getTemperature());
-        txtViewPressure.setText(city.getPressure());
-
-        Button setting = findViewById(R.id.button3);
-        setting.setOnClickListener(v -> {
-            Intent intent1 = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivityForResult(intent1, SETTING_CODE);
-        });
-
-        initRecyclerView(generateDays(), generateTemperatures());
-
-        Button btnSelectCity = (Button) findViewById(R.id.buttonSelectCity);
-        btnSelectCity.setOnClickListener(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.nav_select_city:
+                Intent intent = new Intent(getApplicationContext(), SelectCityActivity.class);
+                intent.putExtra(Constants.EXTRA_PARCEL, city);
+                startActivity(intent);
+                break;
+            case R.id.nav_about:
+                Toast toast = new Toast(getApplicationContext());
+                toast.setText("J hfphf");
+                toast.show();
+                break;
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-            || super.onSupportNavigateUp();
-    }
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-    private void initRecyclerView(String[] days, String[] temperatures) {
-        RecyclerView recyclerView = findViewById(R.id.recycler);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        SocnetAdapter adapter = new SocnetAdapter(days, temperatures);
-        recyclerView.setAdapter(adapter);
-    }
-
-    private String[] generateDays() {
-        String[] days = new String[DAY_COUNT];
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM");
-        Calendar calendar = Calendar.getInstance();
-
-        for (int i = 0; i < DAY_COUNT; i++) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-            days[i] = dateFormatter.format(calendar.getTime());
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
 
-        return days;
-    }
-
-    private String[] generateTemperatures() {
-        String[] temps = new String[DAY_COUNT];
-        Calendar calendar = Calendar.getInstance();
-
-        for (int i = 0; i < DAY_COUNT; i++) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-            temps[i] = "+ " + calendar.get(Calendar.DAY_OF_MONTH);
-        }
-
-        return temps;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (DEBUG) {
-            Log.d(TAG, "onClick() " + city.getName());
-        }
-
-        if (v.getId() == R.id.buttonSelectCity) {
-            Intent intent = new Intent(getApplicationContext(), SelectCityActivity.class);
-            intent.putExtra(Constants.EXTRA_PARCEL, city);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTING_CODE) {
-            recreate();
-        }
-    }
-
-    private String getLines(BufferedReader in) {
-        return in.lines().collect(Collectors.joining("\n"));
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void displayWeather(WeatherRequest weatherRequest) {
-        txtViewCity.setText(weatherRequest.getName());
-        txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - 273.15));
-        txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure()/1.333));
-
-        if (city.isNeedPressure()) {
-            TextView txtViewLabelPressure = (TextView) findViewById(R.id.label_pressure);
-            txtViewLabelPressure.setVisibility(View.VISIBLE);
-            txtViewPressure.setVisibility(View.VISIBLE);
-        }
     }
 }
