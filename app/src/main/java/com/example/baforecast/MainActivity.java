@@ -1,6 +1,7 @@
 package com.example.baforecast;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import com.google.gson.Gson;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -215,6 +217,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         });
                     } catch (Exception e) {
                         Log.e(TAG, "Fail connection", e);
+                        showAllert("Fail connection");
                         e.printStackTrace();
                     } finally {
                         if (null != urlConnection) {
@@ -225,11 +228,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }).start();
         } catch (MalformedURLException e) {
             Log.e(TAG, "Fail URI", e);
+            showAllert("Fail URI");
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Fail encode URL", e);
+            showAllert("Fail encode URL");
             e.printStackTrace();
         }
+    }
+
+    private void showAllert(String allertMsg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.alert_title)
+            .setMessage(allertMsg)
+            .setIcon(R.mipmap.ic_launcher_round)
+            .setCancelable(false)
+            .setPositiveButton(R.string.alert_button,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override

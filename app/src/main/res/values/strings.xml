@@ -24,6 +24,8 @@
     <string name="darkTheme">Dark theme</string>
     <string name="toast">Text for a toast</string>
     <string name="back">Back</string>
+    <string name="alert_title">WARNING!</string>
+    <string name="alert_button">OK</string>
     <string-array name="cities">
         <item>Moscow</item>
         <item>Saint Petersburg</item>

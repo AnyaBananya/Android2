@@ -48,4 +48,6 @@
         <item>01.01.2021 +5</item>
         <item>02.01.2021 +2</item>
     </string-array>
+    <string name="alert_title">Внимание!</string>
+    <string name="alert_button">OK</string>
 </resources>
