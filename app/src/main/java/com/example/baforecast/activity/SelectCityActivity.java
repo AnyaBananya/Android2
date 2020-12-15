@@ -1,9 +1,8 @@
-package com.example.baforecast;
+package com.example.baforecast.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.example.baforecast.model.City;
+import com.example.baforecast.R;
+import com.example.baforecast.constant.Constants;
 import com.example.baforecast.observer.Observer;
 import com.example.baforecast.observer.Publisher;
 import com.example.baforecast.observer.PublisherGetter;
@@ -59,26 +61,6 @@ public class SelectCityActivity extends BaseActivity implements View.OnClickList
 
         Button selectCity = (Button) findViewById(R.id.buttonSelectCity);
         selectCity.setOnClickListener(this);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivityForResult(intent, Constants.SETTING_CODE);
-            return true;
-        }
-
-        if (id == R.id.action_select_city) {
-            Intent intent = new Intent(getApplicationContext(), SelectCityActivity.class);
-            intent.putExtra(Constants.EXTRA_PARCEL, city);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

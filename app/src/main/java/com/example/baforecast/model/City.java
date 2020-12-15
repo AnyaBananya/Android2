@@ -1,4 +1,4 @@
-package com.example.baforecast;
+package com.example.baforecast.model;
 
 import java.io.Serializable;
 

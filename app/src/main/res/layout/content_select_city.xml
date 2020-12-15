@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content">
 
             <fragment
-                    android:name="com.example.baforecast.CitiesFragment"
+                    android:name="com.example.baforecast.fragment.CitiesFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/cities" />

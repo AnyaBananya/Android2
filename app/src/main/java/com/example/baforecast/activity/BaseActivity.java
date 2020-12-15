@@ -1,4 +1,4 @@
-package com.example.baforecast;
+package com.example.baforecast.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,6 +15,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.baforecast.model.City;
+import com.example.baforecast.R;
+import com.example.baforecast.constant.Constants;
 import com.google.android.material.navigation.NavigationView;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -88,7 +91,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_about:
                 Toast toast = new Toast(getApplicationContext());
-                toast.setText("J hfphf");
+                toast.setText(R.string.aboutText);
                 toast.show();
                 break;
         }

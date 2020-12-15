@@ -53,4 +53,5 @@
     <string name="select_city_name">Выберите город</string>
     <string name="settings_name">Настройки</string>
     <string name="button_go_to_home">Домой</string>
+    <string name="aboutText">Здесь могла быть ваша реклама</string>
 </resources>

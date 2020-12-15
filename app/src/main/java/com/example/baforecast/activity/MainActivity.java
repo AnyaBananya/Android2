@@ -1,4 +1,4 @@
-package com.example.baforecast;
+package com.example.baforecast.activity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -9,7 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.baforecast.BuildConfig;
+import com.example.baforecast.model.City;
+import com.example.baforecast.R;
+import com.example.baforecast.adapter.SocnetAdapter;
+import com.example.baforecast.constant.Constants;
 import com.example.baforecast.model.WeatherRequest;
+import com.example.baforecast.source.Source;
+import com.example.baforecast.source.WeatherDisplayable;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
@@ -33,11 +40,11 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, WeatherDisplayable {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final boolean DEBUG = false;
     private static final int DAY_COUNT = 5;
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=%s,RU&appid=%s";
+
     private City city;
     private TextView txtViewCity;
     private TextView txtViewTemperature;
@@ -62,14 +69,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             city = new City(getResources().getStringArray(R.array.cities)[0]);
         }
 
-        connect();
+        connectAndFetch();
 
         txtViewCity.setText(city.getName());
         txtViewTemperature.setText(city.getTemperature());
         txtViewPressure.setText(city.getPressure());
 
         initRecyclerView(generateDays(), generateTemperatures());
-
     }
 
     private void initRecyclerView(String[] days, String[] temperatures) {
@@ -114,12 +120,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private String getLines(BufferedReader in) {
-        return in.lines().collect(Collectors.joining("\n"));
-    }
-
     @SuppressLint("DefaultLocale")
-    private void displayWeather(WeatherRequest weatherRequest) {
+    public void displayWeather(WeatherRequest weatherRequest) {
         txtViewCity.setText(weatherRequest.getName());
         txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - 273.15));
         txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure() / 1.333));
@@ -131,53 +133,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void connect(){
-        final URL uri;
+    private void connectAndFetch() {
+        Source source = new Source();
         try {
-            uri = new URL(String.format(WEATHER_URL, URLEncoder.encode(city.getName(), StandardCharsets.UTF_8.toString()), BuildConfig.WEATHER_API_KEY));
-
-            final Handler handler = new Handler();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    HttpsURLConnection urlConnection = null;
-                    try {
-                        urlConnection = (HttpsURLConnection) uri.openConnection();
-                        urlConnection.setRequestMethod("GET");
-                        urlConnection.setReadTimeout(10000);
-                        BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                        String result = getLines(in);
-                        Gson gson = new Gson();
-                        final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                displayWeather(weatherRequest);
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e(TAG, "Fail connection", e);
-                        showAllert("Fail connection");
-                        e.printStackTrace();
-                    } finally {
-                        if (null != urlConnection) {
-                            urlConnection.disconnect();
-                        }
-                    }
-                }
-            }).start();
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "Fail URI", e);
-            showAllert("Fail URI");
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Fail encode URL", e);
-            showAllert("Fail encode URL");
+            source.connectAndFetch(city, this);
+        } catch (Exception e) {
+            Log.e(TAG, "Fail connection", e);
+            showAllert("Fail connection");
             e.printStackTrace();
         }
     }
 
-    private void showAllert(String allertMsg){
+    private void showAllert(String allertMsg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(R.string.alert_title)
             .setMessage(allertMsg)
@@ -191,5 +158,4 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 }

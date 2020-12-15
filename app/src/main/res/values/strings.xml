@@ -29,6 +29,7 @@
     <string name="select_city_name">Select city</string>
     <string name="settings_name">Settings</string>
     <string name="button_go_to_home">Home</string>
+    <string name="aboutText">Your ad may be here</string>
     <string-array name="cities">
         <item>Moscow</item>
         <item>Saint Petersburg</item>

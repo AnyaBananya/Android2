@@ -30,7 +30,7 @@
                         android:id="@+id/cityInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:name="com.example.baforecast.CityInfoFragment" />
+                        android:name="com.example.baforecast.fragment.CityInfoFragment" />
             </FrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView

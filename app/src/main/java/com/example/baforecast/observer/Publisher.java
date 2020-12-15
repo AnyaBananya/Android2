@@ -1,6 +1,6 @@
 package com.example.baforecast.observer;
 
-import com.example.baforecast.City;
+import com.example.baforecast.model.City;
 
 import java.util.ArrayList;
 import java.util.List;
