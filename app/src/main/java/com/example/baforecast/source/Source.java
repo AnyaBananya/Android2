@@ -11,11 +11,9 @@ import com.example.baforecast.model.WeatherRequest;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -31,33 +29,22 @@ public class Source {
         uri = new URL(
             String.format(Constants.WEATHER_URL, URLEncoder.encode(city.getName(), StandardCharsets.UTF_8.toString()), BuildConfig.WEATHER_API_KEY));
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HttpsURLConnection urlConnection = null;
-                try {
-                    urlConnection = (HttpsURLConnection) uri.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.setReadTimeout(10000);
+        new Thread(() -> {
+            HttpsURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpsURLConnection) uri.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setReadTimeout(10000);
 
-                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    String result = getLines(in);
-                    Gson gson = new Gson();
-                    final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayable.displayWeather(weatherRequest);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG, "Fail connection", e);
-                    e.printStackTrace();
-                } finally {
-                    if (null != urlConnection) {
-                        urlConnection.disconnect();
-                    }
+                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String result = getLines(in);
+                new Parser().parse(result, displayable);
+            } catch (Exception e) {
+                Log.e(TAG, "Fail connection", e);
+                e.printStackTrace();
+            } finally {
+                if (null != urlConnection) {
+                    urlConnection.disconnect();
                 }
             }
         }).start();

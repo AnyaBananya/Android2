@@ -122,15 +122,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @SuppressLint("DefaultLocale")
     public void displayWeather(WeatherRequest weatherRequest) {
-        txtViewCity.setText(weatherRequest.getName());
-        txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - 273.15));
-        txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure() / 1.333));
+        runOnUiThread(() -> {
+            txtViewCity.setText(weatherRequest.getName());
+            txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - 273.15));
+            txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure() / 1.333));
 
-        if (city.isNeedPressure()) {
-            TextView txtViewLabelPressure = (TextView) findViewById(R.id.label_pressure);
-            txtViewLabelPressure.setVisibility(View.VISIBLE);
-            txtViewPressure.setVisibility(View.VISIBLE);
-        }
+            if (city.isNeedPressure()) {
+                TextView txtViewLabelPressure = (TextView) findViewById(R.id.label_pressure);
+                txtViewLabelPressure.setVisibility(View.VISIBLE);
+                txtViewPressure.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void connectAndFetch() {
