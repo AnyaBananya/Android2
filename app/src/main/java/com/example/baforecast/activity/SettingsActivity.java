@@ -1,4 +1,4 @@
-package com.example.baforecast;
+package com.example.baforecast.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 
+import com.example.baforecast.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class SettingsActivity extends BaseActivity {
@@ -17,6 +19,8 @@ public class SettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        Toolbar toolbar = initToolbar();
+        initDrawer(toolbar);
 
         SwitchCompat switchDarkTheme = findViewById(R.id.switch1);
         switchDarkTheme.setChecked(isDarkTheme());

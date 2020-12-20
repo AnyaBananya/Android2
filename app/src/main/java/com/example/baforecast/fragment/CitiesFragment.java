@@ -1,4 +1,4 @@
-package com.example.baforecast;
+package com.example.baforecast.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.baforecast.model.City;
+import com.example.baforecast.R;
+import com.example.baforecast.constant.Constants;
 import com.example.baforecast.observer.Publisher;
 import com.example.baforecast.observer.PublisherGetter;
 

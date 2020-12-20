@@ -1,4 +1,4 @@
-package com.example.baforecast;
+package com.example.baforecast.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,12 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.example.baforecast.model.City;
+import com.example.baforecast.R;
+import com.example.baforecast.constant.Constants;
 import com.example.baforecast.observer.Observer;
 import com.example.baforecast.observer.Publisher;
 import com.example.baforecast.observer.PublisherGetter;
@@ -35,6 +39,8 @@ public class SelectCityActivity extends BaseActivity implements View.OnClickList
 
         publisher.subscribe(this);
         setContentView(R.layout.activity_select_city);
+        Toolbar toolbar = initToolbar();
+        initDrawer(toolbar);
 
         Intent intent = getIntent();
 

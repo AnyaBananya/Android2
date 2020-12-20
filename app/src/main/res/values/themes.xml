@@ -42,5 +42,7 @@
 
     <style name="AppDarkTheme" parent="Theme.MaterialComponents">
         <item name="android:textColor">@color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>
