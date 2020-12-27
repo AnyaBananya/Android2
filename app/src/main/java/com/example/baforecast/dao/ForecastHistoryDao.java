@@ -22,6 +22,9 @@ public interface ForecastHistoryDao {
     @Delete
     void deleteHistory(ForecastHistory forecastHistory);
 
+    @Query("DELETE FROM forecastHistory")
+    void deleteAllHistory();
+
     @Query("DELETE FROM forecastHistory WHERE id = :id")
     void deleteHistoryById(long id);
 

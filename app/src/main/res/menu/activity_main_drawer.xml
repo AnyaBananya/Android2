@@ -13,6 +13,10 @@
                 android:icon="@android:drawable/ic_menu_preferences"
                 android:title="@string/button_go_to_city_list" />
         <item
+                android:id="@+id/nav_history"
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="@string/history_name" />
+        <item
                 android:id="@+id/nav_send_msg"
                 android:icon="@android:drawable/ic_menu_send"
                 android:title="@string/menu_send_msg" />

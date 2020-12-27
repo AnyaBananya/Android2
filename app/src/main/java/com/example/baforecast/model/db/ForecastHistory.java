@@ -14,10 +14,8 @@ public class ForecastHistory {
     public String city;
 
     @ColumnInfo(name = "date")
-    public String date;
+    public int date;
 
     @ColumnInfo(name = "temperature")
     public long temperature;
-
-
 }

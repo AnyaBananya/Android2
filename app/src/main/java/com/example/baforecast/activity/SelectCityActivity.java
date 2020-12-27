@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.example.baforecast.App;
+import com.example.baforecast.model.db.ForecastHistory;
 import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
 import com.example.baforecast.constant.Constants;
@@ -72,6 +74,8 @@ public class SelectCityActivity extends BaseActivity implements View.OnClickList
         if (v.getId() == R.id.buttonSelectCity) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra(Constants.EXTRA_PARCEL, city);
+            intent.putExtra(Constants.EXTRA_ADD_TO_HISTORY, true);
+
             startActivity(intent);
         }
     }

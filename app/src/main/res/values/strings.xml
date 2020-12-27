@@ -62,4 +62,6 @@
         <item>01.01.2021 +5</item>
         <item>02.01.2021 +2</item>
     </string-array>
+    <string name="history_name">History</string>
+    <string name="delete_history">Delete history</string>
 </resources>

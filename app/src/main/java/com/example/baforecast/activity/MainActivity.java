@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import com.example.baforecast.App;
+import com.example.baforecast.model.db.ForecastHistory;
 import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
 import com.example.baforecast.adapter.SocnetAdapter;
@@ -43,6 +45,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private AppBarConfiguration mAppBarConfiguration;
     private Source retrofit;
 
+    private boolean isNeedToAddHistory = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             city = (City) intent.getSerializableExtra("parcel");
         } else {
             city = new City(getResources().getStringArray(R.array.cities)[0]);
+        }
+
+        if (intent.hasExtra(Constants.EXTRA_ADD_TO_HISTORY)) {
+            if (intent.getBooleanExtra(Constants.EXTRA_ADD_TO_HISTORY, false)) {
+                isNeedToAddHistory = true;
+            }
         }
 
         retrofit = new Source();
@@ -137,13 +147,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void displayWeather(WeatherRequest weatherRequest) {
         runOnUiThread(() -> {
             txtViewCity.setText(weatherRequest.getName());
-            txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - 273.15));
-            txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure() / 1.333));
+            txtViewTemperature.setText(String.format("%.0f", weatherRequest.getMain().getTemp() - Constants.ABSOLUTE_ZERO));
+            txtViewPressure.setText(String.format("%.0f", weatherRequest.getMain().getPressure() / Constants.PRESSURE_PA));
 
             if (city.isNeedPressure()) {
                 TextView txtViewLabelPressure = (TextView) findViewById(R.id.label_pressure);
                 txtViewLabelPressure.setVisibility(View.VISIBLE);
                 txtViewPressure.setVisibility(View.VISIBLE);
+            }
+
+            if (isNeedToAddHistory) {
+                ForecastHistory history = new ForecastHistory();
+                history.city = weatherRequest.getName();
+                history.date = weatherRequest.getDt();
+                history.temperature = (long) weatherRequest.getMain().getTemp();
+
+                App.getInstance().getForecastHistorySource().addHistory(history);
+                isNeedToAddHistory = false;
             }
         });
     }

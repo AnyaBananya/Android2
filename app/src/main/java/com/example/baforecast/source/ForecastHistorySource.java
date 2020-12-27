@@ -30,6 +30,7 @@ public class ForecastHistorySource {
 
     public void addHistory(ForecastHistory forecastHistory) {
         forecastHistoryDao.insertHistory(forecastHistory);
+        loadHistory();
     }
 
     public void updateHistory(ForecastHistory forecastHistory) {
@@ -37,8 +38,13 @@ public class ForecastHistorySource {
         loadHistory();
     }
 
-    public void removeHistory(long id) {
-        forecastHistoryDao.deleteHistoryById(id);
+    public void removeHistory(ForecastHistory forecastHistory) {
+        forecastHistoryDao.deleteHistory(forecastHistory);
+        loadHistory();
+    }
+
+    public void deleteHistory() {
+        forecastHistoryDao.deleteAllHistory();
         loadHistory();
     }
 }

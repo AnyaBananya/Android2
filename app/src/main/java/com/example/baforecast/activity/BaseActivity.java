@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
 import com.example.baforecast.constant.Constants;
@@ -88,6 +86,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Intent intentSelectAct = new Intent(getApplicationContext(), SelectCityActivity.class);
                 intentSelectAct.putExtra(Constants.EXTRA_PARCEL, city);
                 startActivity(intentSelectAct);
+                break;
+            case R.id.nav_history:
+                Intent intentHistory = new Intent(getApplicationContext(), HistoryActivity.class);
+                intentHistory.putExtra(Constants.EXTRA_PARCEL, city);
+                startActivity(intentHistory);
                 break;
             case R.id.nav_about:
                 Toast toast = new Toast(getApplicationContext());
