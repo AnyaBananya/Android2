@@ -3,6 +3,7 @@ package com.example.baforecast.activity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -43,13 +44,14 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, WeatherDisplayable {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final boolean DEBUG = false;
-    private static final int DAY_COUNT = 5;
+    private SharedPreferences sharedPreferences;
 
     private City city;
     private TextView txtViewCity;
     private TextView txtViewTemperature;
     private TextView txtViewPressure;
     private AppBarConfiguration mAppBarConfiguration;
+    private Source retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             city = new City(getResources().getStringArray(R.array.cities)[0]);
         }
 
+        System.out.println("city.getName() = " + city.getName());
+
+        retrofit = new Source();
+        retrofit.initRetorfit();
         connectAndFetch();
 
         txtViewCity.setText(city.getName());
@@ -88,11 +94,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private String[] generateDays() {
-        String[] days = new String[DAY_COUNT];
+        String[] days = new String[Constants.DAY_COUNT];
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM");
         Calendar calendar = Calendar.getInstance();
 
-        for (int i = 0; i < DAY_COUNT; i++) {
+        for (int i = 0; i < Constants.DAY_COUNT; i++) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             days[i] = dateFormatter.format(calendar.getTime());
         }
@@ -101,10 +107,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private String[] generateTemperatures() {
-        String[] temps = new String[DAY_COUNT];
+        String[] temps = new String[Constants.DAY_COUNT];
         Calendar calendar = Calendar.getInstance();
 
-        for (int i = 0; i < DAY_COUNT; i++) {
+        for (int i = 0; i < Constants.DAY_COUNT; i++) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             temps[i] = "+ " + calendar.get(Calendar.DAY_OF_MONTH);
         }
@@ -136,9 +142,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void connectAndFetch() {
-        Source source = new Source();
         try {
-            source.connectAndFetch(city, this);
+            //source.connectAndFetch(city, this);
+            retrofit.requestRetrofit(city, this);
         } catch (Exception e) {
             Log.e(TAG, "Fail connection", e);
             showAllert("Fail connection");
