@@ -4,13 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.baforecast.BuildConfig;
 import com.example.baforecast.model.City;
 import com.example.baforecast.R;
 import com.example.baforecast.adapter.SocnetAdapter;
@@ -19,7 +20,8 @@ import com.example.baforecast.model.WeatherRequest;
 import com.example.baforecast.source.Source;
 import com.example.baforecast.source.WeatherDisplayable;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -28,18 +30,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, WeatherDisplayable {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -59,6 +51,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_main);
         Toolbar toolbar = initToolbar();
         initDrawer(toolbar);
+        initBackgound();
 
         txtViewCity = findViewById(R.id.text_city);
         txtViewTemperature = findViewById(R.id.text_curr_temp);
@@ -82,6 +75,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         txtViewPressure.setText(city.getPressure());
 
         initRecyclerView(generateDays(), generateTemperatures());
+    }
+
+    private void initBackgound() {
+        Picasso.get().load(getString(R.string.background_url)).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                findViewById(R.id.main_layout).setBackground(new BitmapDrawable(bitmap));
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                showAllert("Background is not loaded");
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
     }
 
     private void initRecyclerView(String[] days, String[] temperatures) {
