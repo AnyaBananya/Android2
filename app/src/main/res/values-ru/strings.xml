@@ -54,4 +54,6 @@
     <string name="settings_name">Настройки</string>
     <string name="button_go_to_home">Домой</string>
     <string name="aboutText">Здесь могла быть ваша реклама</string>
+    <string name="history_name">История</string>
+    <string name="delete_history">Очистить историю</string>
 </resources>

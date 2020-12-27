@@ -35,8 +35,6 @@ public class SocnetAdapter extends RecyclerView.Adapter<SocnetAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-
-        Log.d("getItemCount", String.valueOf(days.length));
         return days.length;
     }
 

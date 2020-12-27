@@ -1,4 +1,4 @@
-package com.example.baforecast.model;
+package com.example.baforecast.model.json;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -19,6 +19,9 @@ public class WeatherRequest {
     @SerializedName("clouds")
     @Expose
     private Clouds clouds;
+    @SerializedName("dt")
+    @Expose
+    private int dt;
     @SerializedName("name")
     @Expose
     private String name;
@@ -69,5 +72,13 @@ public class WeatherRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getDt() {
+        return dt;
+    }
+
+    public void setDt(int dt) {
+        this.dt = dt;
     }
 }

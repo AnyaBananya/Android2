@@ -1,6 +1,6 @@
 package com.example.baforecast.source;
 
-import com.example.baforecast.model.WeatherRequest;
+import com.example.baforecast.model.json.WeatherRequest;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
