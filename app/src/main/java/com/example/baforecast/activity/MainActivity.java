@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import com.example.baforecast.model.City;
 import com.example.baforecast.R;
 import com.example.baforecast.adapter.SocnetAdapter;
@@ -22,7 +21,6 @@ import com.example.baforecast.source.WeatherDisplayable;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -64,10 +62,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             city = new City(getResources().getStringArray(R.array.cities)[0]);
         }
 
-        System.out.println("city.getName() = " + city.getName());
-
         retrofit = new Source();
-        retrofit.initRetorfit();
         connectAndFetch();
 
         txtViewCity.setText(city.getName());
@@ -155,7 +150,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void connectAndFetch() {
         try {
-            //source.connectAndFetch(city, this);
             retrofit.requestRetrofit(city, this);
         } catch (Exception e) {
             Log.e(TAG, "Fail connection", e);
