@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.baforecast.model.City;
+import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
 import com.example.baforecast.constant.Constants;
 import com.google.android.material.navigation.NavigationView;

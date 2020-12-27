@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.example.baforecast.model.City;
+import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
 import com.example.baforecast.constant.Constants;
 import com.example.baforecast.observer.Observer;

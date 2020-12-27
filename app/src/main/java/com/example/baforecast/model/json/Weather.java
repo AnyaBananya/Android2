@@ -1,4 +1,4 @@
-package com.example.baforecast.model;
+package com.example.baforecast.model.json;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
