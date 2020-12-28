@@ -1,9 +1,17 @@
 package com.example.baforecast.activity;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -13,14 +21,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.baforecast.receiver.BatteryReceiver;
 import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
 import com.example.baforecast.constant.Constants;
+import com.example.baforecast.receiver.NetworkReceiver;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String NameSharedPreference = "LOGIN";
     private static final String IsDarkTheme = "IS_DARK_THEME";
+    private BroadcastReceiver batteryReceiver = new BatteryReceiver();
+    private BroadcastReceiver networkReceiver = new NetworkReceiver();
     private City city;
 
     @Override
@@ -39,6 +56,26 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             city = new City(getResources().getStringArray(R.array.cities)[0]);
         }
         setContentView(R.layout.activity_base);
+
+        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(networkReceiver, new IntentFilter(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION));
+
+        initNotificationChannel();
+        initGetToken();
+    }
+
+    private void initGetToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("PushMessage", "getInstanceId failed", task.getException());
+                        return;
+                    }
+                }
+            });
+
     }
 
     protected boolean isDarkTheme() {
@@ -139,7 +176,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(batteryReceiver);
+    }
+
+    private void initNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("2", "name", importance);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 }
