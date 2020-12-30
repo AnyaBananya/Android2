@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=31:AA:4B:B4:B2:4E:96:20:35:94:90:BC:47:E8:6E:90:B8:AF:D0:F0%3Bcom.example.baforecast
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.example.baforecast
+
+    SHA-1 certificate fingerprint:
+    31:AA:4B:B4:B2:4E:96:20:35:94:90:BC:47:E8:6E:90:B8:AF:D0:F0
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyD4eQDX1i8XdrJn7YI2xo-0u0Wvy_3Z9wI</string>
+</resources>

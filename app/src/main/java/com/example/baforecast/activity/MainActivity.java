@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import com.example.baforecast.App;
 import com.example.baforecast.model.db.ForecastHistory;
 import com.example.baforecast.model.json.City;
@@ -23,6 +24,7 @@ import com.example.baforecast.source.WeatherDisplayable;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.ui.AppBarConfiguration;

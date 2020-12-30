@@ -56,4 +56,5 @@
     <string name="aboutText">Здесь могла быть ваша реклама</string>
     <string name="history_name">История</string>
     <string name="delete_history">Очистить историю</string>
+    <string name="check_weather">Узнать погоду</string>
 </resources>
