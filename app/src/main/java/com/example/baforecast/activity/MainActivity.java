@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import com.example.baforecast.model.City;
 import com.example.baforecast.R;
 import com.example.baforecast.adapter.SocnetAdapter;
@@ -21,6 +22,7 @@ import com.example.baforecast.source.WeatherDisplayable;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -42,6 +44,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private TextView txtViewPressure;
     private AppBarConfiguration mAppBarConfiguration;
     private Source retrofit;
+
+    private final Target target = new MyTarget();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,22 +77,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initBackgound() {
-        Picasso.get().load(getString(R.string.background_url)).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                findViewById(R.id.main_layout).setBackground(new BitmapDrawable(bitmap));
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                showAllert("Background is not loaded");
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        });
+        Picasso.get().load(getString(R.string.background_url)).into(target);
     }
 
     private void initRecyclerView(String[] days, String[] temperatures) {
@@ -171,5 +160,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    class MyTarget implements Target {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            findViewById(R.id.main_layout).setBackground(new BitmapDrawable(bitmap));
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            showAllert("Background is not loaded");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+        }
     }
 }
