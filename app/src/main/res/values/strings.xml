@@ -64,4 +64,5 @@
     </string-array>
     <string name="history_name">History</string>
     <string name="delete_history">Delete history</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
