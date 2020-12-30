@@ -42,9 +42,4 @@
         </LinearLayout>
 
     </ScrollView>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_go_to_map"
-            android:text="Карты"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

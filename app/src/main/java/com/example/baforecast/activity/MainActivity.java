@@ -10,11 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.baforecast.App;
-import com.example.baforecast.MapsActivity;
 import com.example.baforecast.model.db.ForecastHistory;
 import com.example.baforecast.model.json.City;
 import com.example.baforecast.R;
@@ -84,13 +82,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         txtViewPressure.setText(city.getPressure());
 
         initRecyclerView(generateDays(), generateTemperatures());
-
-        Button buttonGoToMap = findViewById(R.id.button_go_to_map);
-
-        buttonGoToMap.setOnClickListener(v -> {
-            Intent intent3 = new Intent(getApplicationContext(), MapsActivity.class);
-            startActivity(intent3);
-        });
     }
 
     private void initBackgound() {
