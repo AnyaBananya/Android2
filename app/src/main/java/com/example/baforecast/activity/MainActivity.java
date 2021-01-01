@@ -3,13 +3,15 @@ package com.example.baforecast.activity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.baforecast.BuildConfig;
 import com.example.baforecast.model.City;
 import com.example.baforecast.R;
 import com.example.baforecast.adapter.SocnetAdapter;
@@ -18,7 +20,8 @@ import com.example.baforecast.model.WeatherRequest;
 import com.example.baforecast.source.Source;
 import com.example.baforecast.source.WeatherDisplayable;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -27,29 +30,22 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, WeatherDisplayable {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final boolean DEBUG = false;
-    private static final int DAY_COUNT = 5;
+    private SharedPreferences sharedPreferences;
 
     private City city;
     private TextView txtViewCity;
     private TextView txtViewTemperature;
     private TextView txtViewPressure;
     private AppBarConfiguration mAppBarConfiguration;
+    private Source retrofit;
+
+    private final Target target = new MyTarget();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +53,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_main);
         Toolbar toolbar = initToolbar();
         initDrawer(toolbar);
+        initBackgound();
 
         txtViewCity = findViewById(R.id.text_city);
         txtViewTemperature = findViewById(R.id.text_curr_temp);
@@ -69,6 +66,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             city = new City(getResources().getStringArray(R.array.cities)[0]);
         }
 
+        retrofit = new Source();
         connectAndFetch();
 
         txtViewCity.setText(city.getName());
@@ -76,6 +74,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         txtViewPressure.setText(city.getPressure());
 
         initRecyclerView(generateDays(), generateTemperatures());
+    }
+
+    private void initBackgound() {
+        Picasso.get().load(getString(R.string.background_url)).into(target);
     }
 
     private void initRecyclerView(String[] days, String[] temperatures) {
@@ -88,11 +90,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private String[] generateDays() {
-        String[] days = new String[DAY_COUNT];
+        String[] days = new String[Constants.DAY_COUNT];
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM");
         Calendar calendar = Calendar.getInstance();
 
-        for (int i = 0; i < DAY_COUNT; i++) {
+        for (int i = 0; i < Constants.DAY_COUNT; i++) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             days[i] = dateFormatter.format(calendar.getTime());
         }
@@ -101,10 +103,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private String[] generateTemperatures() {
-        String[] temps = new String[DAY_COUNT];
+        String[] temps = new String[Constants.DAY_COUNT];
         Calendar calendar = Calendar.getInstance();
 
-        for (int i = 0; i < DAY_COUNT; i++) {
+        for (int i = 0; i < Constants.DAY_COUNT; i++) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             temps[i] = "+ " + calendar.get(Calendar.DAY_OF_MONTH);
         }
@@ -136,9 +138,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void connectAndFetch() {
-        Source source = new Source();
         try {
-            source.connectAndFetch(city, this);
+            retrofit.requestRetrofit(city, this);
         } catch (Exception e) {
             Log.e(TAG, "Fail connection", e);
             showAllert("Fail connection");
@@ -159,5 +160,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    class MyTarget implements Target {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            findViewById(R.id.main_layout).setBackground(new BitmapDrawable(bitmap));
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            showAllert("Background is not loaded");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+        }
     }
 }

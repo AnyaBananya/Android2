@@ -1,11 +1,26 @@
 package com.example.baforecast.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class WeatherRequest {
+    @SerializedName("coord")
+    @Expose
     private Coord coord;
+    @SerializedName("weather")
+    @Expose
     private Weather[] weather;
+    @SerializedName("main")
+    @Expose
     private Main main;
+    @SerializedName("wind")
+    @Expose
     private Wind wind;
+    @SerializedName("clouds")
+    @Expose
     private Clouds clouds;
+    @SerializedName("name")
+    @Expose
     private String name;
 
     public Coord getCoord() {

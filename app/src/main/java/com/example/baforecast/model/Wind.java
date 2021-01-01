@@ -1,14 +1,21 @@
 package com.example.baforecast.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Wind {
-    private int speed;
+    @SerializedName("speed")
+    @Expose
+    private double speed;
+    @SerializedName("deg")
+    @Expose
     private int deg;
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 

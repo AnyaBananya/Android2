@@ -1,7 +1,14 @@
 package com.example.baforecast.model;
 
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose;
+
 public class Coord {
+    @SerializedName("lon")
+    @Expose
     private float lat;
+    @SerializedName("lat")
+    @Expose
     private  float lon;
 
     public float getLat() {
