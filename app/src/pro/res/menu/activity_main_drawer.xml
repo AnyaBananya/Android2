@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_home"
+                android:icon="@android:drawable/star_big_off"
+                android:title="@string/button_go_to_home" />
+        <item
+                android:id="@+id/nav_select_city"
+                android:icon="@android:drawable/ic_menu_preferences"
+                android:title="@string/button_go_to_city_list" />
+        <item
+                android:id="@+id/nav_history"
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="@string/history_name" />
+        <item
+                android:id="@+id/nav_send_msg"
+                android:icon="@android:drawable/ic_menu_send"
+                android:title="@string/menu_send_msg" />
+        <item
+                android:id="@+id/nav_about"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="@string/menu_about" />
+    </group>
+</menu>
