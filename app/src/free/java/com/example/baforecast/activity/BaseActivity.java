@@ -40,13 +40,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
 import java.util.List;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class BaseActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
     private static final String NameSharedPreference = "LOGIN";
     private static final String IsDarkTheme = "IS_DARK_THEME";
     private static final int PERMISSION_REQUEST_CODE = 10;
@@ -137,11 +138,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Intent intentSelectAct = new Intent(getApplicationContext(), SelectCityActivity.class);
                 intentSelectAct.putExtra(Constants.EXTRA_PARCEL, city);
                 startActivity(intentSelectAct);
-                break;
-            case R.id.nav_history:
-                Intent intentHistory = new Intent(getApplicationContext(), HistoryActivity.class);
-                intentHistory.putExtra(Constants.EXTRA_PARCEL, city);
-                startActivity(intentHistory);
                 break;
             case R.id.nav_about:
                 Toast toast = new Toast(getApplicationContext());
